@@ -1,0 +1,273 @@
+<!DOCTYPE html>
+<html lang="en">
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>LAB</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+</head>
+<body>
+<nav class="navbar navbar-expand navbar-dark bg-dark">
+    <div class="collapse navbar-collapse" id="navbarsExample02">
+        <ul class="navbar-nav mr-auto">
+            <li class="nav-item">
+                <a class="nav-link" href="Empleados.html">Tecnicos</a>
+            </li>
+            <li class="nav-item active">
+                <a class="nav-link" href="Historial.html">Estadisticas-Sitios</a>
+            </li>
+        </ul>
+    </div>
+</nav>
+
+
+
+<main class="py-6 bg-surface-secondary">
+    <div class="container-fluid">
+        <div class="card shadow border-0 mb-7">
+            <div class="card-header">
+                <div class="row align-items-center">
+                    <div  class="col-sm-8 col-12 mb-4 mb-sm-0">
+                        <h3 class="mb-0 ls-tight">Lista de Tecnicos</h3>
+                    </div>
+                    <div class="col-sm-4 col-12 d-flex align-items-center justify-content-end">
+                        <a href="#" class="btn d-inline-flex btn-sm btn-success mx-1 align-items-center" data-bs-toggle="modal" data-bs-target="#modaAgregar">
+                                        <span class=" pe-2">
+                                            <i class="bi bi-plus"></i>
+                                        </span>
+                            <span>Registrar</span>
+                        </a>
+                    </div>
+                </div>
+                <!--  <div th:if="${msg != null}" th:text="${msg}" class="alert alert-success" role="alert"></div> -->
+             </div>
+             <!--TABLA-->
+            <div class="container table-responsive mb-4">
+                <table id="example" class="table table-hover" style="width:100%">
+                    <thead>
+                    <tr>
+                        <th scope="col">Nombre</th>
+                        <th scope="col">Apellido</th>
+                        <th scope="col">DNI</th>
+                        <th scope="col">Celular</th>
+                        <th scope="col">Edad</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr th:each="tecnico,obj: ${lista}">
+                        <td th:text="${tecnico.nombre}"></td>
+                        <td th:text="${tecnico.apellido}"></td>
+                        <td th:text="${tecnico.dni}"></td>
+                        <td th:text="${tecnico.celular}"></td>
+                        <td th:text="${tecnico.edad}"></td>
+                        <td class="text-end">
+                            <button type="button" class="btn btn-sm btn-square btn-primary" data-bs-toggle="modal" th:data-bs-target ="${'#modaActualizar'+ obj.index}">
+                                <i class="bi bi-pencil"></i>
+                            </button>
+                        </td>
+                    </tr>
+
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- Modal Actualizar -->
+            <div class="modal fade" th:each="tecnico, obj : ${lista}" th:id ="${'modaActualizar'+ obj.index}" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                <div class="modal-dialog modal-lg">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h3 class="modal-title fs-5" id="exampleModalLabel">Actualiza los datos del Tecnico</h3>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <form method="post" th:action="@{/guardarfarmacista}">
+                            <div class="modal-body row">
+                                <input type="hidden" name="idUsuario" th:value="${tecnico.idTecnico}">
+                                <div class="row pt-3">
+                                    <div class="col">
+                                        <label >Nombre:</label>
+                                        <input  name= "nombre" type="text" class="form-control"  th:value="${tecnico.nombre}">
+                                    </div>
+
+                                    <div class="col">
+                                        <label >Correo:</label>
+                                        <input name= "correo" type="text" class="form-control"  th:value="${tecnico.apellido}">
+                                    </div>
+                                </div>
+
+                                <div class="row pt-5">
+                                    <div class="col">
+                                        <label >DNI:</label>
+                                        <input name= "dni" type="number" class="form-control"  th:value="${tecnico.dni}">
+                                    </div>
+
+                                    <div class="col">
+                                        <label >Código (colegio médico):</label>
+                                        <input  name= "codigoColegio" type="number" class="form-control"  th:value="${tecnico.celular}">
+                                    </div>
+                                </div>
+
+                                <div class="row pt-5">
+                                    <div class="col">
+                                        <label >Distrito de residencia</label>
+                                        <input name= "distritoResidencia" type="number" class="form-control"  th:value="${tecnico.edad}">
+                                    </div>
+                                </div>
+
+
+                            </div>
+
+                            <div class="modal-footer mt-3">
+                                <button type="submit" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#actualizar">Actualizar</button>
+                                <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Cancelar</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Modal Eliminar -->
+            <div class="modal fade" th:each="farmacista, obj : ${listaFarmacistas}" th:id ="${'modaEliminar'+ obj.index}" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h3 class="text-center">¿Está seguro de eliminar al farmacista seleccionado?</h3>
+                        </div>
+
+                        <div class="modal-footer d-flex justify-content-center">
+                            <a type="button" class="btn btn-primary" th:href="@{'/administradorsede/borrarfarmacista?idFarmacista=' + ${farmacista.idUsuario}}">Eliminar</a>
+                            <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Cancelar</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Modal Registrar -->
+            <div class="modal fade" id="modaAgregar" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                <div class="modal-dialog modal-lg">
+                    <div class="modal-content">
+                        <form method="post" th:action="@{/administradorsede/guardarfarmacista}">
+                            <div class="modal-header">
+                                <h3 class="modal-title fs-5" id="exampleModalLabel">Solicitar registro de Farmacista</h3>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                            </div>
+                            <div class="modal-body row">
+                                <div class="row pt-3">
+                                    <div class="col">
+                                        <label for="nombre">Nombre:</label>
+                                        <input id="nombre" name="nombre" type="text" class="form-control">
+                                    </div>
+
+                                    <div class="col">
+                                        <label for="correo">Correo:</label>
+                                        <input id="correo" name="correo" type="email" class="form-control">
+                                    </div>
+                                </div>
+
+                                <div class="row pt-5">
+                                    <div class="col">
+                                        <label for="dni">DNI:</label>
+                                        <input id="dni" name="dni" type="number" class="form-control">
+                                    </div>
+
+
+                                    <div class="col">
+                                        <label for="codigoColegio">Código (colegio médico)</label>
+                                        <input id="codigoColegio" name="codigoColegio" type="number" class="form-control">
+                                    </div>
+                                </div>
+
+                                <div class="row pt-5">
+                                    <div class="col">
+                                        <label for="distritoResidencia">Distrito de residencia</label>
+                                        <input id="distritoResidencia" name="distritoResidencia" type="text" class="form-control">
+                                    </div>
+                                    <div class="col">
+                                        <label for="sedeN">Sede:</label>
+                                        <select id="sedeN" class="form-select" name="idSedes">
+                                            <option th:value="${adminSede.sedes.idSedes}"
+                                                    th:text="${adminSede.sedes.nombre}"
+                                                    th:selected="${true}"></option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="modal-footer mt-3">
+                                <button type="submit" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#registrado">Registrar</button>
+                                <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Cancelar</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+
+            <!--Modal actualizado exitosamente (no se muestra) -->
+            <div class="modal fade" id="actualizar" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h3 class="text-center">Farmacista actualizado exitosamente.</h3>
+                        </div>
+                        <div class="modal-footer d-flex justify-content-center">
+                            <button type="button" class="btn btn-primary " data-bs-dismiss="modal">Ok</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!--Modal registrado exitosamente (no se muestra) -->
+            <div class="modal fade" id="registrado" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="container text-center">
+                            <div class="row row-cols-1">
+                                <div class="col pt-5 icono">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-check-circle" viewBox="0 0 16 16">
+                                        <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14m0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16"/>
+                                        <path d="m10.97 4.97-.02.022-3.473 4.425-2.093-2.094a.75.75 0 0 0-1.06 1.06L6.97 11.03a.75.75 0 0 0 1.079-.02l3.992-4.99a.75.75 0 0 0-1.071-1.05"/>
+                                    </svg>
+                                </div>
+                                <div class="col">
+                                    <h3 class="text-center pt-5 pb-5">Solicitud de registro de Farmacista enviado exitosamente.</h3>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="modal-footer d-flex justify-content-center">
+                            <button type="button" class="btn btn-primary" data-bs-dismiss="modal">Ok</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Modal Eliminado exitosamente (no se muestra) -->
+            <div class="modal fade" id="eliminar" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                <div class="modal-dialog modal-lg">
+                    <div class="modal-content">
+                        <div class="container text-center">
+                            <div class="row row-cols-1">
+                                <div class="col pt-5 icono1">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-x-circle" viewBox="0 0 16 16">
+                                        <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14m0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16"/>
+                                        <path d="M4.646 4.646a.5.5 0 0 1 .708 0L8 7.293l2.646-2.647a.5.5 0 0 1 .708.708L8.707 8l2.647 2.646a.5.5 0 0 1-.708.708L8 8.707l-2.646 2.647a.5.5 0 0 1-.708-.708L7.293 8 4.646 5.354a.5.5 0 0 1 0-.708"/>
+                                    </svg>
+                                </div>
+                                <div class="col">
+                                    <h3 class="text-center pt-5 pb-5">Farmacista eliminado exitosamente.</h3>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="modal-footer d-flex justify-content-center">
+                            <button type="button" class="btn btn-primary" data-bs-dismiss="modal">Ok</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+
+        </div>
+    </div>
+</main>
+</body>
+</html>
